@@ -17,7 +17,6 @@ Ejemplo: board_4x4.txt conteniendo los siguientes caracteres.
 3. Ejecutar el siguiente curl:
 
 `
-curl -X POST 'http://localhost:8080/resolve?size=4' -H 'Content-Type: application/x-www-form-urlencoded' -H 
-'cache-control: no-cache' -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' -F 
-'file=@{ruta_del_archivo}\board_4x4.txt'
+curl -X POST 'http://localhost:8080/resolve?size=4' -H 'cache-control: no-cache' -F 
+'file=@{full_path_to_the_file}/board_4x4.txt'
 `
