@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/")
 public class Ohh1Controller {
-	
+
 	@RequestMapping(
 			path = "/resolve",
 			consumes = {"multipart/form-data"},
@@ -23,7 +23,7 @@ public class Ohh1Controller {
 	public String resolveBoard(
 			@RequestPart(value = "file", required = true) MultipartFile file,
 			@RequestParam(value = "size", required = true) int size) {
-		
+
 		Scanner sc = null;
 		try {
 			sc = new Scanner(file.getInputStream());
@@ -31,16 +31,16 @@ public class Ohh1Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		int[][] board = new int[size][size];
-		
+
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				board[i][j] = sc.nextInt();
 			}
 		}
-		
-		System.out.println("Board: ");
+
+		System.out.println("Ohh1State: ");
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				if (board[i][j] >= 0) {
@@ -52,8 +52,8 @@ public class Ohh1Controller {
 			}
 			System.out.println("");
 		}
-		
-		return JSONObject.quote("El tablero fue procesado correctamente");	
+
+		return JSONObject.quote("El tablero fue procesado correctamente");
 	}
 
 }
