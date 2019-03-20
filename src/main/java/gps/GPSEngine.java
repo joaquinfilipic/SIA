@@ -32,7 +32,7 @@ public class GPSEngine {
 		bestCosts = new HashMap<>();
 		this.problem = problem;
 		this.strategy = strategy;
-		this.heuristic = Optional.of(heuristic);
+		this.heuristic = Optional.ofNullable(heuristic);
 		explosionCounter = 0;
 		finished = false;
 		failed = false;
@@ -42,7 +42,7 @@ public class GPSEngine {
 		GPSNode rootNode = new GPSNode(problem.getInitState(), 0, null);
 		open.add(rootNode);
 		// TODO: ¿Lógica de IDDFS?
-		while (open.size() <= 0) {
+		while (open.size() >= 0) {
 			GPSNode currentNode = open.remove();
 			if (problem.isGoal(currentNode.getState())) {
 				finished = true;

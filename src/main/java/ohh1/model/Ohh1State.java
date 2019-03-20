@@ -2,20 +2,14 @@ package ohh1.model;
 
 import gps.api.State;
 
-import java.awt.Point;
-import java.util.List;
-
 public class Ohh1State implements State {
 
 	private int[][] board;
 	private int emptyCells;
 
-	private List<Point> mandatoryMoves;
-
-	public Ohh1State(final int[][] board, final int emptyCells, final List<Point> mandatoryMoves) {
+	public Ohh1State(final int[][] board, final int emptyCells) {
 		this.board = board;
 		this.emptyCells = emptyCells;
-		this.mandatoryMoves = mandatoryMoves;
 	}
 
 	public int[][] getBoard() {
@@ -34,16 +28,25 @@ public class Ohh1State implements State {
 		this.emptyCells = emptyCells;
 	}
 
-	public List<Point> getMandatoryMoves() {
-		return mandatoryMoves;
-	}
-
-	public void setMandatoryMoves(final List<Point> mandatoryMoves) {
-		this.mandatoryMoves = mandatoryMoves;
-	}
-
 	@Override
 	public String getRepresentation() {
-		return null;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				sb.append(board[i][j] + " ");
+			}
+			sb.append("\n");
+		}
+		sb.append("\n");
+		return sb.toString();
 	}
+
+	public int[][] cloneBoard() {
+		int[][] result = new int[board.length][];
+		for (int r = 0; r < board.length; r++) {
+			result[r] = board[r].clone();
+		}
+		return result;
+	}
+	
 }

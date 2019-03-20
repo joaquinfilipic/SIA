@@ -31,12 +31,18 @@ public class Ohh1Rule implements Rule {
 	@Override
 	public Optional<State> apply(State state) {
 		
-		if (Ohh1RuleValidator.isValid((Ohh1State)state, this)) {
-			
-			// TODO: paint cell
-			
-		}
-		return null;
+		Ohh1State ohh1State = (Ohh1State)state;
+		
+		return Optional.ofNullable(ohh1State)
+				.filter(s -> !Ohh1RuleValidator.isValid(s, this))
+				.map(s -> {
+					int[][] newBoard = ohh1State.cloneBoard();
+					
+					// TODO: paint cell
+					newBoard[point.getX()][point.getY()] = color.getValue();
+					
+					return new Ohh1State(newBoard, s.getEmptyCells() - 1);
+				});
 	}
 
 	public Point getPoint() {
