@@ -26,7 +26,7 @@ public interface Problem {
 	/**
 	 * Provides the list of all the rules that the problem involves. These rules are state independent.
 	 * 
-	 * @return The initial state of the problem to be solved.
+	 * @return The list of rules.
 	 */
 	List<Rule> getRules();
 

@@ -22,6 +22,10 @@ public class Ohh1InputScanner {
 
 			// Scan the size of the board
 			int size = sc.nextInt();
+			
+			if ((size % 2) == 1) {
+				throw new RequestException(HttpStatus.BAD_REQUEST, "Size parameter must be an even positive number");
+			}
 
 			int[][] board = new int[size][size];
 
@@ -31,8 +35,6 @@ public class Ohh1InputScanner {
 					board[i][j] = sc.nextInt();
 				}
 			}
-
-			sc.close();
 
 			return board;
 
@@ -52,6 +54,12 @@ public class Ohh1InputScanner {
 			exception.printStackTrace();
 			throw new RequestException(HttpStatus.BAD_REQUEST,
 					"Found end of file while reading the board. Verify the size and board inputs.");
+		} finally {
+			
+			if (sc != null) {
+				sc.close();
+			}
+			
 		}
 	}
 	

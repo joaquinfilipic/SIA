@@ -23,10 +23,11 @@ public class Ohh1Problem implements Problem {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board.length; j++) {
 				
-				rules.add(new Ohh1Rule(new Point(i, j), CellColor.RED));
-				rules.add(new Ohh1Rule(new Point(i, j), CellColor.BLUE));
-
 				if (board[i][j] == CellColor.BLANK.getValue()) {
+				
+					rules.add(new Ohh1Rule(new Point(i, j), CellColor.RED));
+					rules.add(new Ohh1Rule(new Point(i, j), CellColor.BLUE));
+				
 					emptyCells++;
 				}
 

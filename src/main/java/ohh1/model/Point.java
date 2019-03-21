@@ -25,5 +25,13 @@ public class Point {
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("x: " + getX() + ", y: " + getY());
+		sb.append("\n");
+		return sb.toString();
+	}
 
 }

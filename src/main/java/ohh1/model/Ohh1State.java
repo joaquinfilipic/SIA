@@ -1,5 +1,7 @@
 package ohh1.model;
 
+import java.util.Arrays;
+
 import gps.api.State;
 
 public class Ohh1State implements State {
@@ -48,5 +50,31 @@ public class Ohh1State implements State {
 		}
 		return result;
 	}
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ohh1State ohh1State = (Ohh1State) o;
+
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board.length; j++){
+                if (board[i][j] != ohh1State.board[i][j]){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int[] hashcodes = new int[board.length];
+        for (int i = 0; i < board.length; i++){
+            hashcodes[i] = 31 * Arrays.hashCode(board[i]);
+        }
+        return Arrays.hashCode(hashcodes);
+    }
 	
 }

@@ -3,6 +3,7 @@ package gps;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
@@ -16,6 +17,7 @@ import gps.api.State;
 public class GPSEngine {
 
 	Queue<GPSNode> open;
+	
 	Map<State, Integer> bestCosts;
 	Problem problem;
 	long explosionCounter;
@@ -26,9 +28,14 @@ public class GPSEngine {
 
 	// Use this variable in open set order.
 	protected SearchStrategy strategy;
+	
+	private Map<Integer,State> closedStates = new HashMap<>();
 
 	public GPSEngine(Problem problem, SearchStrategy strategy, Heuristic heuristic) {
+		
 		// TODO: open = *Su queue favorito, TENIENDO EN CUENTA EL ORDEN DE LOS NODOS*
+		open = new LinkedList<>();
+		
 		bestCosts = new HashMap<>();
 		this.problem = problem;
 		this.strategy = strategy;
@@ -43,7 +50,9 @@ public class GPSEngine {
 		open.add(rootNode);
 		// TODO: ¿Lógica de IDDFS?
 		while (open.size() >= 0) {
+			
 			GPSNode currentNode = open.remove();
+			
 			if (problem.isGoal(currentNode.getState())) {
 				finished = true;
 				solutionNode = currentNode;
@@ -57,6 +66,7 @@ public class GPSEngine {
 	}
 
 	private void explode(GPSNode node) {
+				
 		Collection<GPSNode> newCandidates;
 		switch (strategy) {
 		case BFS:
@@ -73,7 +83,14 @@ public class GPSEngine {
 			}
 			newCandidates = new ArrayList<>();
 			addCandidates(node, newCandidates);
+			
 			// TODO: ¿Cómo se agregan los nodos a open en DFS?
+			LinkedList<GPSNode> linkedListOpen = (LinkedList<GPSNode>) open;
+			
+			for (GPSNode candidate : newCandidates) {
+				linkedListOpen.addFirst(candidate);
+			}
+			
 			break;
 		case IDDFS:
 			if (bestCosts.containsKey(node.getState())) {
@@ -107,9 +124,26 @@ public class GPSEngine {
 			if (newState.isPresent()) {
 				GPSNode newNode = new GPSNode(newState.get(), node.getCost() + rule.getCost(), rule);
 				newNode.setParent(node);
-				candidates.add(newNode);
+				
+				if (! closedStates.containsKey(newNode.getState().hashCode())) {
+					closedStates.put(newNode.getState().hashCode(), newNode.getState());
+					candidates.add(newNode);
+				}
 			}
 		}
+	}
+	
+	// TODO: remove this function
+	private void printOpen(LinkedList<GPSNode> list) {
+		
+		System.out.println("----------------------------------------------");
+		System.out.println("Printing list of open nodes");
+		for (GPSNode node : list) {
+			
+			System.out.println(node.getState().getRepresentation());
+			
+		}
+		System.out.println("----------------------------------------------");
 	}
 
 	private boolean isBest(State state, Integer cost) {

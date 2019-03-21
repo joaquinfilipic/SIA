@@ -4,7 +4,7 @@ import gps.api.Rule;
 import gps.api.State;
 
 public class GPSNode {
-
+	
 	private State state;
 
 	private GPSNode parent;
@@ -35,6 +35,7 @@ public class GPSNode {
 		return cost;
 	}
 
+	//TODO: check this method.
 	@Override
 	public String toString() {
 		return state.toString();
@@ -42,9 +43,9 @@ public class GPSNode {
 
 	public String getSolution() {
 		if (this.parent == null) {
-			return this.state.toString();
+			return this.state.getRepresentation();
 		}
-		return this.parent.getSolution() + this.state.toString();
+		return this.parent.getSolution() + this.state.getRepresentation();
 	}
 
 	@Override
