@@ -51,6 +51,9 @@ public class GPSEngine {
 		// TODO: ¿Lógica de IDDFS?
 		while (open.size() >= 0) {
 			
+			// TODO: Delete this code
+//			this.printOpen((LinkedList<GPSNode>)open);
+			
 			GPSNode currentNode = open.remove();
 			
 			if (problem.isGoal(currentNode.getState())) {
@@ -87,9 +90,13 @@ public class GPSEngine {
 			// TODO: ¿Cómo se agregan los nodos a open en DFS?
 			LinkedList<GPSNode> linkedListOpen = (LinkedList<GPSNode>) open;
 			
-			for (GPSNode candidate : newCandidates) {
-				linkedListOpen.addFirst(candidate);
+			for (int i = newCandidates.size() - 1; i >= 0; i--) {
+				linkedListOpen.addFirst(((ArrayList<GPSNode>)newCandidates).get(i));
 			}
+			
+//			for (GPSNode candidate : newCandidates) {
+//				linkedListOpen.addFirst(candidate);
+//			}
 			
 			break;
 		case IDDFS:
@@ -133,17 +140,17 @@ public class GPSEngine {
 		}
 	}
 	
-	// TODO: remove this function
+	// TODO: Delete this code
 	private void printOpen(LinkedList<GPSNode> list) {
 		
-		System.out.println("----------------------------------------------");
-		System.out.println("Printing list of open nodes");
+		System.out.println("+--------------------------------+");
+		System.out.println("| Printing list of nodes to open |");
+		System.out.println("+--------------------------------+");
 		for (GPSNode node : list) {
 			
 			System.out.println(node.getState().getRepresentation());
 			
 		}
-		System.out.println("----------------------------------------------");
 	}
 
 	private boolean isBest(State state, Integer cost) {

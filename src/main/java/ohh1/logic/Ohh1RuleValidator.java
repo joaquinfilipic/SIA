@@ -8,26 +8,33 @@ public class Ohh1RuleValidator {
 
 	public static boolean isValid(final Ohh1State state, final Ohh1Rule rule) {
 		
-		//System.out.println("Attempting to paint point [x: " + rule.getPoint().getX() + ", y: " + rule.getPoint().getY() + "] with color: " + rule.getColor().getValue());
-		
-		boolean validConsecutives = validateConsecutives(state.getBoard(), rule.getPoint(), rule.getColor().getValue());
-		if (!validConsecutives) {
-			//System.out.println("invalid consecutives");
-			return false;
-		}
-		
-		boolean validColorCount = validateColorCount(state.getBoard(), rule.getPoint(), rule.getColor().getValue());
-		if (!validColorCount) {
-			//System.out.println("invalid color count");
-			return false;
-		}
-		
-		boolean validDistinctLines = validateDistinctLines(state.getBoard(), rule.getPoint(),
-				rule.getColor().getValue());
-		if (!validDistinctLines) {
-			//System.out.println("invalid distinct lines");
-			return false;
-		}
+		// TODO: Delete this code
+//		System.out.println("Attempting to paint point [x: " + rule.getPoint().getX() + ", y: " + rule.getPoint().getY() + "] with color: " + rule.getColor().getValue());
+//		
+//		boolean validEmptiness = validateEmptiness(state.getBoard(), rule.getPoint());
+//		if (!validEmptiness) {
+//			System.out.println("invalid empty");
+//			return false;
+//		}
+//		
+//		boolean validConsecutives = validateConsecutives(state.getBoard(), rule.getPoint(), rule.getColor().getValue());
+//		if (!validConsecutives) {
+//			System.out.println("invalid consecutives");
+//			return false;
+//		}
+//		
+//		boolean validColorCount = validateColorCount(state.getBoard(), rule.getPoint(), rule.getColor().getValue());
+//		if (!validColorCount) {
+//			System.out.println("invalid color count");
+//			return false;
+//		}
+//		
+//		boolean validDistinctLines = validateDistinctLines(state.getBoard(), rule.getPoint(),
+//				rule.getColor().getValue());
+//		if (!validDistinctLines) {
+//			System.out.println("invalid distinct lines");
+//			return false;
+//		}
 
 		return validateEmptiness(state.getBoard(), rule.getPoint()) 
 				&& validateConsecutives(state.getBoard(), rule.getPoint(), rule.getColor().getValue())
@@ -137,7 +144,7 @@ public class Ohh1RuleValidator {
 			boolean equals = true;
 			for (int j = 0; j < size; j++) {
 
-				if ((j == y && board[row][j] != colorVal) || (j != y && board[row][j] != board[x][j])) {
+				if ((j == y && board[row][j] != colorVal) || (j != y && board[row][j] != board[x][j]) || (board[row][j] == CellColor.BLANK.getValue())) {
 					equals = false;
 				}
 
@@ -159,7 +166,7 @@ public class Ohh1RuleValidator {
 			boolean equals = true;
 			for (int i = 0; i < size; i++) {
 
-				if ((i == x && board[i][col] != colorVal) || (i != x && board[i][col] != board[i][y])) {
+				if ((i == x && board[i][col] != colorVal) || (i != x && board[i][col] != board[i][y]) || (board[i][col] == CellColor.BLANK.getValue())) {
 					equals = false;
 				}
 			}
