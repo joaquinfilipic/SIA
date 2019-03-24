@@ -7,34 +7,6 @@ import ohh1.model.Point;
 public class Ohh1RuleValidator {
 
 	public static boolean isValid(final Ohh1State state, final Ohh1Rule rule) {
-		
-		// TODO: Delete this code
-//		System.out.println("Attempting to paint point [x: " + rule.getPoint().getX() + ", y: " + rule.getPoint().getY() + "] with color: " + rule.getColor().getValue());
-//		
-//		boolean validEmptiness = validateEmptiness(state.getBoard(), rule.getPoint());
-//		if (!validEmptiness) {
-//			System.out.println("invalid empty");
-//			return false;
-//		}
-//		
-//		boolean validConsecutives = validateConsecutives(state.getBoard(), rule.getPoint(), rule.getColor().getValue());
-//		if (!validConsecutives) {
-//			System.out.println("invalid consecutives");
-//			return false;
-//		}
-//		
-//		boolean validColorCount = validateColorCount(state.getBoard(), rule.getPoint(), rule.getColor().getValue());
-//		if (!validColorCount) {
-//			System.out.println("invalid color count");
-//			return false;
-//		}
-//		
-//		boolean validDistinctLines = validateDistinctLines(state.getBoard(), rule.getPoint(),
-//				rule.getColor().getValue());
-//		if (!validDistinctLines) {
-//			System.out.println("invalid distinct lines");
-//			return false;
-//		}
 
 		return validateEmptiness(state.getBoard(), rule.getPoint()) 
 				&& validateConsecutives(state.getBoard(), rule.getPoint(), rule.getColor().getValue())

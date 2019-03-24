@@ -3,11 +3,13 @@ package gps;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 import gps.api.Heuristic;
 import gps.api.Problem;
@@ -29,13 +31,11 @@ public class GPSEngine {
 	// Use this variable in open set order.
 	protected SearchStrategy strategy;
 	
-	private Map<Integer,State> closedStates = new HashMap<>();
-
 	public GPSEngine(Problem problem, SearchStrategy strategy, Heuristic heuristic) {
 		
 		// TODO: open = *Su queue favorito, TENIENDO EN CUENTA EL ORDEN DE LOS NODOS*
 		open = new LinkedList<>();
-		
+				
 		bestCosts = new HashMap<>();
 		this.problem = problem;
 		this.strategy = strategy;
@@ -50,9 +50,6 @@ public class GPSEngine {
 		open.add(rootNode);
 		// TODO: ¿Lógica de IDDFS?
 		while (open.size() >= 0) {
-			
-			// TODO: Delete this code
-//			this.printOpen((LinkedList<GPSNode>)open);
 			
 			GPSNode currentNode = open.remove();
 			
@@ -78,7 +75,12 @@ public class GPSEngine {
 			}
 			newCandidates = new ArrayList<>();
 			addCandidates(node, newCandidates);
-			// TODO: ¿Cómo se agregan los nodos a open en BFS?
+			
+			// TODO: ¿Cómo se agregan los nodos a open en BFS?			
+			for (GPSNode candidate: newCandidates) {
+				open.add(candidate);
+			}
+			
 			break;
 		case DFS:
 			if (bestCosts.containsKey(node.getState())) {
@@ -90,13 +92,9 @@ public class GPSEngine {
 			// TODO: ¿Cómo se agregan los nodos a open en DFS?
 			LinkedList<GPSNode> linkedListOpen = (LinkedList<GPSNode>) open;
 			
-			for (int i = newCandidates.size() - 1; i >= 0; i--) {
-				linkedListOpen.addFirst(((ArrayList<GPSNode>)newCandidates).get(i));
+			for (GPSNode candidate : newCandidates) {
+				linkedListOpen.addFirst(candidate);
 			}
-			
-//			for (GPSNode candidate : newCandidates) {
-//				linkedListOpen.addFirst(candidate);
-//			}
 			
 			break;
 		case IDDFS:
@@ -132,10 +130,7 @@ public class GPSEngine {
 				GPSNode newNode = new GPSNode(newState.get(), node.getCost() + rule.getCost(), rule);
 				newNode.setParent(node);
 				
-				if (! closedStates.containsKey(newNode.getState().hashCode())) {
-					closedStates.put(newNode.getState().hashCode(), newNode.getState());
-					candidates.add(newNode);
-				}
+				candidates.add(newNode);
 			}
 		}
 	}

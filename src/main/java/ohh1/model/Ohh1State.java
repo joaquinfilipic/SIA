@@ -70,9 +70,12 @@ public class Ohh1State implements State {
 
     @Override
     public int hashCode() {
+    	int aux = 31;
         int[] hashcodes = new int[board.length];
         for (int i = 0; i < board.length; i++){
-            hashcodes[i] = 31 * Arrays.hashCode(board[i]);
+        	
+            hashcodes[i] = aux * Arrays.hashCode(board[i]);
+            aux += hashcodes[i];
         }
         return Arrays.hashCode(hashcodes);
     }
