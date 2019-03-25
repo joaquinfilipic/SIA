@@ -3,13 +3,11 @@ package gps;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Set;
 
 import gps.api.Heuristic;
 import gps.api.Problem;
@@ -31,6 +29,10 @@ public class GPSEngine {
 	// Use this variable in open set order.
 	protected SearchStrategy strategy;
 	
+	// For IDDFS algorithm.
+	// TODO: check a better way to handle this.
+	private int currentMaxDepth;
+	
 	public GPSEngine(Problem problem, SearchStrategy strategy, Heuristic heuristic) {
 		
 		// TODO: open = *Su queue favorito, TENIENDO EN CUENTA EL ORDEN DE LOS NODOS*
@@ -43,22 +45,37 @@ public class GPSEngine {
 		explosionCounter = 0;
 		finished = false;
 		failed = false;
+		
+		currentMaxDepth = 0;
 	}
 
 	public void findSolution() {
-		GPSNode rootNode = new GPSNode(problem.getInitState(), 0, null);
+		GPSNode rootNode = new GPSNode(problem.getInitState(), 0, null, 0);
 		open.add(rootNode);
-		// TODO: ¿Lógica de IDDFS?
-		while (open.size() >= 0) {
-			
+		
+		while (open.size() > 0) {
+									
 			GPSNode currentNode = open.remove();
-			
+						
 			if (problem.isGoal(currentNode.getState())) {
 				finished = true;
 				solutionNode = currentNode;
 				return;
-			} else {
-				explode(currentNode);
+			} 
+			
+			else {
+				if (strategy != SearchStrategy.IDDFS || currentNode.getDepth() < currentMaxDepth) {
+					explode(currentNode);
+				}
+			}
+			
+			if (strategy == SearchStrategy.IDDFS && open.size() == 0) {
+				
+				// reset open nodes list
+				open = new LinkedList<>();
+				open.add(rootNode);
+				
+				currentMaxDepth ++;
 			}
 		}
 		failed = true;
@@ -90,20 +107,28 @@ public class GPSEngine {
 			addCandidates(node, newCandidates);
 			
 			// TODO: ¿Cómo se agregan los nodos a open en DFS?
-			LinkedList<GPSNode> linkedListOpen = (LinkedList<GPSNode>) open;
+			LinkedList<GPSNode> dfsOpenList = (LinkedList<GPSNode>) open;
 			
 			for (GPSNode candidate : newCandidates) {
-				linkedListOpen.addFirst(candidate);
+				dfsOpenList.addFirst(candidate);
 			}
 			
 			break;
 		case IDDFS:
-			if (bestCosts.containsKey(node.getState())) {
-				return;
-			}
+			// TODO: check if it is posible to implement this in iddfs algorithm.
+//			if (bestCosts.containsKey(node.getState())) {
+//				return;
+//			}
 			newCandidates = new ArrayList<>();
 			addCandidates(node, newCandidates);
+			
 			// TODO: ¿Cómo se agregan los nodos a open en IDDFS?
+			LinkedList<GPSNode> iddfsOpenList = (LinkedList<GPSNode>) open;
+			
+			for (GPSNode candidate : newCandidates) {
+				iddfsOpenList.addFirst(candidate);
+			}
+			
 			break;
 		case GREEDY:
 			newCandidates = new PriorityQueue<>(/* TODO: Comparator! */);
@@ -127,7 +152,7 @@ public class GPSEngine {
 		for (Rule rule : problem.getRules()) {
 			Optional<State> newState = rule.apply(node.getState());
 			if (newState.isPresent()) {
-				GPSNode newNode = new GPSNode(newState.get(), node.getCost() + rule.getCost(), rule);
+				GPSNode newNode = new GPSNode(newState.get(), node.getCost() + rule.getCost(), rule, node.getDepth() + 1);
 				newNode.setParent(node);
 				
 				candidates.add(newNode);
@@ -136,7 +161,7 @@ public class GPSEngine {
 	}
 	
 	// TODO: Delete this code
-	private void printOpen(LinkedList<GPSNode> list) {
+	private void printOpen(Queue<GPSNode> list) {
 		
 		System.out.println("+--------------------------------+");
 		System.out.println("| Printing list of nodes to open |");

@@ -12,11 +12,14 @@ public class GPSNode {
 	private Integer cost;
 
 	private Rule generationRule;
+	
+	private int depth;
 
-	public GPSNode(State state, Integer cost, Rule generationRule) {
+	public GPSNode(State state, Integer cost, Rule generationRule, int depth) {
 		this.state = state;
 		this.cost = cost;
 		this.generationRule = generationRule;
+		this.depth = depth;
 	}
 
 	public GPSNode getParent() {
@@ -33,6 +36,22 @@ public class GPSNode {
 
 	public Integer getCost() {
 		return cost;
+	}
+	
+	public Rule getGenerationRule() {
+		return generationRule;
+	}
+
+	public void setGenerationRule(Rule generationRule) {
+		this.generationRule = generationRule;
+	}
+	
+	public int getDepth() {
+		return depth;
+	}
+	
+	public void setDepth(int depth) {
+		this.depth = depth;
 	}
 
 	//TODO: check this method.
@@ -63,14 +82,6 @@ public class GPSNode {
 		} else if (!state.equals(other.state))
 			return false;
 		return true;
-	}
-
-	public Rule getGenerationRule() {
-		return generationRule;
-	}
-
-	public void setGenerationRule(Rule generationRule) {
-		this.generationRule = generationRule;
 	}
 
 }
