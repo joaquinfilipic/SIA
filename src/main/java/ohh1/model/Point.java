@@ -27,6 +27,17 @@ public class Point {
 	}
 	
 	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Point point = (Point) o;
+		
+		return this.x == point.getX() && this.y == point.getY();
+	}
+	
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("x: " + getX() + ", y: " + getY());

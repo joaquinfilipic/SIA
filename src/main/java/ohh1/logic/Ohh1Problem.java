@@ -1,6 +1,5 @@
 package ohh1.logic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import gps.api.Problem;
@@ -8,33 +7,31 @@ import gps.api.Rule;
 import gps.api.State;
 import ohh1.model.CellColor;
 import ohh1.model.Ohh1State;
-import ohh1.model.Point;
 
 public class Ohh1Problem implements Problem {
 
 	private State initialState;
 	List<Rule> rules;
 
-	public Ohh1Problem(int[][] board) {
+	public Ohh1Problem(Ohh1State initialState) {
 
-		this.rules = new ArrayList<>();
-		int emptyCells = 0;
-
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board.length; j++) {
+		this.rules = Ohh1RuleGenerator.generateRules(initialState.getBoard(), initialState.getFixedPointsByRows());
+		
+		int[][] board = initialState.getBoard();
+		
+		for (int row = 0; row < board.length; row ++) {	
+			for (int rule = 0; rule < rules.size(); rule ++) {
 				
-				if (board[i][j] == CellColor.BLANK.getValue()) {
-				
-					rules.add(new Ohh1Rule(new Point(i, j), CellColor.RED));
-					rules.add(new Ohh1Rule(new Point(i, j), CellColor.BLUE));
-				
-					emptyCells++;
+				Ohh1Rule ohh1Rule = (Ohh1Rule) rules.get(rule);
+				if (ohh1Rule.getRow() == row) {
+					board[row] = ohh1Rule.getRowArrange();
 				}
-
+				
 			}
 		}
 		
-		this.initialState = new Ohh1State(board, emptyCells);
+		initialState.setBoard(board);
+		this.initialState = initialState;
 	}
 
 	@Override
@@ -47,7 +44,19 @@ public class Ohh1Problem implements Problem {
 	public boolean isGoal(State state) {
 
 		Ohh1State ohh1State = (Ohh1State) state;
-		return ohh1State.getEmptyCells() == 0;
+		int[][] board = ohh1State.getBoard();
+		
+		for (int row = 0; row < board.length; row++) {
+			for (int col = 0; col < board.length; col++) {
+				
+				if (board[row][col] == CellColor.BLANK.getValue()) {
+					return false;
+				}
+				
+			}
+		}
+		
+		return Ohh1RestrictionManager.isBoardValid(ohh1State.getBoard());
 	}
 
 	@Override

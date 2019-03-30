@@ -1,6 +1,7 @@
 package ohh1.presentation.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 import org.json.JSONObject;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import gps.GPSEngine;
 import gps.SearchStrategy;
 import gps.api.Problem;
+import gps.api.Rule;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,12 @@ import org.slf4j.LoggerFactory;
 import ohh1.exception.RequestException;
 import ohh1.logic.Ohh1InputScanner;
 import ohh1.logic.Ohh1Problem;
+import ohh1.logic.Ohh1RestrictionManager;
+import ohh1.logic.Ohh1Rule;
+import ohh1.logic.Ohh1RuleGenerator;
+import ohh1.logic.Ohh1RuleValidator;
+import ohh1.model.Ohh1State;
+import ohh1.model.Point;
 
 @RestController
 @RequestMapping("/")
@@ -38,12 +46,12 @@ public class Ohh1Controller {
 			@RequestParam(value = "strategy", required = false) String strategy
 			) {
 		
-		int[][] board = Ohh1InputScanner.scanBoard(file);
+		Ohh1State initialState = Ohh1InputScanner.scanInitialState(file);
 		SearchStrategy searchStrategy = Ohh1InputScanner.scanStrategy(strategy);
 
 		log.info("Input correctly scanned");
 		
-		Problem problem = new Ohh1Problem(board);
+		Problem problem = new Ohh1Problem(initialState);
 		GPSEngine engine = new GPSEngine(problem, searchStrategy, null);
 		
 		engine.findSolution();
@@ -60,7 +68,10 @@ public class Ohh1Controller {
 		
 		System.out.println(solution);
 		
+		System.out.println("Explosion counter: " + engine.getExplosionCounter());
+		
 		return engine.getSolutionNode().getState().getRepresentation();
+				
 	}
 
 }

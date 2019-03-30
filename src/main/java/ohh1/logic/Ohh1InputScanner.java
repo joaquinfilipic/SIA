@@ -1,7 +1,9 @@
 package ohh1.logic;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -10,10 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gps.SearchStrategy;
 import ohh1.exception.RequestException;
+import ohh1.model.CellColor;
+import ohh1.model.Ohh1State;
+import ohh1.model.Point;
 
 public class Ohh1InputScanner {
 
-	public static int[][] scanBoard(MultipartFile file) {
+	public static Ohh1State scanInitialState(MultipartFile file) {
 
 		Scanner sc = null;
 		try {
@@ -28,15 +33,25 @@ public class Ohh1InputScanner {
 			}
 
 			int[][] board = new int[size][size];
+			
+			List<List<Point>> fixedPointsByRow = new ArrayList<>();
 
-			// Scan the board
+			// Scan the board with the fixed points
 			for (int i = 0; i < size; i++) {
+				
+				List<Point> fixedPoints = new ArrayList<>();
+				
 				for (int j = 0; j < size; j++) {
 					board[i][j] = sc.nextInt();
+					if (board[i][j] != CellColor.BLANK.getValue()) {
+						fixedPoints.add(new Point(i,j));
+					}
 				}
+				
+				fixedPointsByRow.add(fixedPoints);
 			}
-
-			return board;
+			
+			return new Ohh1State(board, fixedPointsByRow);
 
 		} catch (IOException exception) {
 

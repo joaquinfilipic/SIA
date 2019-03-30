@@ -1,17 +1,20 @@
 package ohh1.model;
 
 import java.util.Arrays;
+import java.util.List;
 
 import gps.api.State;
 
 public class Ohh1State implements State {
 
 	private int[][] board;
-	private int emptyCells;
+	private List<List<Point>> fixedPointsByRow;
 
-	public Ohh1State(final int[][] board, final int emptyCells) {
+	public Ohh1State(final int[][] board, final List<List<Point>> fixedPointsByRow) {
+
 		this.board = board;
-		this.emptyCells = emptyCells;
+		this.fixedPointsByRow = fixedPointsByRow;
+
 	}
 
 	public int[][] getBoard() {
@@ -22,12 +25,12 @@ public class Ohh1State implements State {
 		this.board = board;
 	}
 
-	public int getEmptyCells() {
-		return emptyCells;
+	public List<List<Point>> getFixedPointsByRows() {
+		return fixedPointsByRow;
 	}
 
-	public void setEmptyCells(int emptyCells) {
-		this.emptyCells = emptyCells;
+	public void setFixedPointsByRows(List<List<Point>> fixedPointsByRow) {
+		this.fixedPointsByRow = fixedPointsByRow;
 	}
 
 	@Override
@@ -50,34 +53,36 @@ public class Ohh1State implements State {
 		}
 		return result;
 	}
-	
+
 	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ohh1State ohh1State = (Ohh1State) o;
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Ohh1State ohh1State = (Ohh1State) o;
 
-        for (int i = 0; i < board.length; i++){
-            for (int j = 0; j < board.length; j++){
-                if (board[i][j] != ohh1State.board[i][j]){
-                    return false;
-                }
-            }
-        }
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board.length; j++) {
+				if (board[i][j] != ohh1State.board[i][j]) {
+					return false;
+				}
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-    	int aux = 31;
-        int[] hashcodes = new int[board.length];
-        for (int i = 0; i < board.length; i++){
-        	
-            hashcodes[i] = aux * Arrays.hashCode(board[i]);
-            aux += hashcodes[i];
-        }
-        return Arrays.hashCode(hashcodes);
-    }
-	
+	@Override
+	public int hashCode() {
+		int aux = 31;
+		int[] hashcodes = new int[board.length];
+		for (int i = 0; i < board.length; i++) {
+
+			hashcodes[i] = aux * Arrays.hashCode(board[i]);
+			aux += hashcodes[i];
+		}
+		return Arrays.hashCode(hashcodes);
+	}
+
 }

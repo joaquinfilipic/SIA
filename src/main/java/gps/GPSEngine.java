@@ -52,7 +52,7 @@ public class GPSEngine {
 	public void findSolution() {
 		GPSNode rootNode = new GPSNode(problem.getInitState(), 0, null, 0);
 		open.add(rootNode);
-		
+				
 		while (open.size() > 0) {
 									
 			GPSNode currentNode = open.remove();

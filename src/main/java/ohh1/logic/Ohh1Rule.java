@@ -4,18 +4,32 @@ import java.util.Optional;
 
 import gps.api.Rule;
 import gps.api.State;
-import ohh1.model.CellColor;
 import ohh1.model.Ohh1State;
-import ohh1.model.Point;
 
 public class Ohh1Rule implements Rule {
 	
-	private Point point;
-	private CellColor color;
+	private int[] rowArrange;
+	private int row;
 	
-	public Ohh1Rule(final Point point, final CellColor color) {
-		this.point = point;
-		this.color = color;
+	public Ohh1Rule(final int[] rowArrange, final int row) {
+		this.rowArrange = rowArrange;
+		this.row = row;
+	}
+
+	public int[] getRowArrange() {
+		return rowArrange;
+	}
+
+	public void setRowArrange(int[] rowArrange) {
+		this.rowArrange = rowArrange;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public void setRow(int row) {
+		this.row = row;
 	}
 
 	@Override
@@ -25,7 +39,18 @@ public class Ohh1Rule implements Rule {
 
 	@Override
 	public String getName() {
-		return ("Rule: paint cell " + point.toString() + " with color " + color.getName());
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("Rule: paint row ").append(row).append(" with the following arrange: ");
+		for (int i = 0; i < rowArrange.length; i++) {
+			if (i == rowArrange.length - 1) {
+				sb.append(rowArrange[i]);
+			}
+			else {
+				sb.append(rowArrange[i]).append(" ");
+			}
+		}
+		return sb.toString();
 	}
 
 	@Override
@@ -34,31 +59,15 @@ public class Ohh1Rule implements Rule {
 		Ohh1State ohh1State = (Ohh1State)state;
 		
 		return Optional.ofNullable(ohh1State)
-				.filter(s -> Ohh1RuleValidator.isValid(s, this))
+				.filter(s -> Ohh1RuleValidator.isValid(ohh1State, this))
 				.map(s -> {
 					int[][] newBoard = ohh1State.cloneBoard();
 					
-					// Paint cell
-					newBoard[point.getX()][point.getY()] = color.getValue();
+					// Paint row
+					newBoard[row] = rowArrange;
 					
-					return new Ohh1State(newBoard, s.getEmptyCells() - 1);
+					return new Ohh1State(newBoard, ohh1State.getFixedPointsByRows());
 				});
-	}
-
-	public Point getPoint() {
-		return point;
-	}
-
-	public void setPoint(Point point) {
-		this.point = point;
-	}
-
-	public CellColor getColor() {
-		return color;
-	}
-
-	public void setColor(CellColor color) {
-		this.color = color;
 	}
 
 }
