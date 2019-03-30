@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+import ohh1.logic.*;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ohh1.exception.RequestException;
-import ohh1.logic.Ohh1InputScanner;
-import ohh1.logic.Ohh1Problem;
-import ohh1.logic.Ohh1RestrictionManager;
-import ohh1.logic.Ohh1Rule;
-import ohh1.logic.Ohh1RuleGenerator;
-import ohh1.logic.Ohh1RuleValidator;
 import ohh1.model.Ohh1State;
 import ohh1.model.Point;
 
@@ -52,7 +47,7 @@ public class Ohh1Controller {
 		log.info("Input correctly scanned");
 		
 		Problem problem = new Ohh1Problem(initialState);
-		GPSEngine engine = new GPSEngine(problem, searchStrategy, null);
+		GPSEngine engine = new GPSEngine(problem, searchStrategy, new Ohh1Heuristic());
 		
 		engine.findSolution();
 		
@@ -68,7 +63,7 @@ public class Ohh1Controller {
 		
 		System.out.println(solution);
 		
-		System.out.println("Explosion counter: " + engine.getExplosionCounter());
+		System.out.println("Explosion counter with " + engine.getStrategy() + ": " + engine.getExplosionCounter());
 		
 		return engine.getSolutionNode().getState().getRepresentation();
 				

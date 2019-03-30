@@ -11,9 +11,6 @@ public class Ohh1Heuristic implements Heuristic {
     public Integer getValue(final State state) {
 
         Ohh1State ohh1State = (Ohh1State) state;
-
-        printBoard(ohh1State.getBoard());
-
         int restrictionsCount = 0;
 
         restrictionsCount += getEqualRowsCount(ohh1State.getBoard());
