@@ -7,6 +7,23 @@ import ohh1.model.Ohh1State;
 
 public class Ohh1Heuristic implements Heuristic {
 
+    public static int FIRST_HEURISTIC = 1;
+    public static int SECOND_HEURISTIC = 2;
+
+    private int heuristic;
+
+    public Ohh1Heuristic(final int heuristic) {
+        this.heuristic = heuristic;
+    }
+
+    public int getHeuristic() {
+        return heuristic;
+    }
+
+    public void setHeuristic(final int heuristic) {
+        this.heuristic = heuristic;
+    }
+
     @Override
     public Integer getValue(final State state) {
 
@@ -82,8 +99,11 @@ public class Ohh1Heuristic implements Heuristic {
                             blueCount++;
                         }
 
-                        if (consecutiveColorsCount % 3 == 0) {
-                            consecutiveColorsCount = 0;
+                        if (consecutiveColorsCount >= 3 || consecutiveColorsCount <= -3) {
+                            if (heuristic == FIRST_HEURISTIC) {
+                                consecutiveColorsCount = 0;
+                            }
+
                             consecutiveColorsRestrictionCount++;
                         }
                     }
@@ -100,15 +120,5 @@ public class Ohh1Heuristic implements Heuristic {
         }
 
         return equalColsCount + consecutiveColorsRestrictionCount + equalColorCountSumRestricions;
-    }
-
-    // TODO: Remove, only for testing
-    private void printBoard(int[][] board) {
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board.length; col++) {
-                System.out.print(board[row][col] + " ");
-            }
-            System.out.println();
-        }
     }
 }

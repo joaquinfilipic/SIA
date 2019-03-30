@@ -1,15 +1,14 @@
 package ohh1.model;
 
-public enum CellColor {
-	
-    BLANK("Blank", 0),
-    RED("Red", 1),
-    BLUE("Blue", 2);
+public enum HeuristicEnum {
+
+    FIRST("First", 1),
+    SECOND("Second", 2);
 
     private String name;
     private int value;
 
-    CellColor(final String name, final int value) {
+    HeuristicEnum(final String name, final int value) {
         this.name = name;
         this.value = value;
     }
@@ -17,9 +16,8 @@ public enum CellColor {
     public String getName() {
         return name;
     }
-    
+
     public int getValue() {
-    	return value;
+        return value;
     }
-    
 }

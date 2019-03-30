@@ -1,14 +1,13 @@
 package gps;
 
-import java.util.*;
-
 import gps.api.Heuristic;
 import gps.api.Problem;
 import gps.api.Rule;
 import gps.api.State;
 import ohh1.exception.RequestException;
-import ohh1.logic.Ohh1Heuristic;
 import org.springframework.http.HttpStatus;
+
+import java.util.*;
 
 public class GPSEngine {
 
@@ -54,7 +53,7 @@ public class GPSEngine {
 
         if (strategy == SearchStrategy.ASTAR) {
             if (!heuristic.isPresent()) {
-                throw new RequestException(HttpStatus.INTERNAL_SERVER_ERROR, "Heuristic not found");
+                throw new RequestException(HttpStatus.INTERNAL_SERVER_ERROR, "HeuristicEnum not found");
             }
 
             State initialState = problem.getInitState();
