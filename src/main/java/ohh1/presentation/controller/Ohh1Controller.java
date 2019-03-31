@@ -28,7 +28,8 @@ public class Ohh1Controller {
     public String resolveBoard(
             @RequestPart(value = "file") MultipartFile file,
             @RequestParam(value = "strategy") String strategy,
-            @RequestParam(value = "heuristic", required = false) Integer heuristic
+            @RequestParam(value = "heuristic", required = false) Integer heuristic,
+            @RequestParam(value = "iterativeDepth", required = false) Integer iterativeDepth
     ) {
 
         Ohh1State initialState = Ohh1InputScanner.scanInitialState(file);
@@ -36,7 +37,11 @@ public class Ohh1Controller {
 
         if ((searchStrategy == SearchStrategy.ASTAR || searchStrategy == SearchStrategy.GREEDY)
                 && (heuristic == null || (heuristic != HeuristicEnum.FIRST.getValue() && heuristic != HeuristicEnum.SECOND.getValue()))) {
-            throw new RequestException(HttpStatus.BAD_REQUEST, "A Star and GREEDY required a valid heuristic");
+            throw new RequestException(HttpStatus.BAD_REQUEST, "A Star and GREEDY required a valid heuristic param, " +
+                    "heuristic ∈ {1, 2}");
+        } else if (searchStrategy == SearchStrategy.IDDFS && (iterativeDepth == null || iterativeDepth <= 0)) {
+            throw new RequestException(HttpStatus.BAD_REQUEST, "IDDFS required a valid iterativeDepth param greater " +
+                    "than zero");
         }
 
         log.info("Input correctly scanned");
@@ -46,6 +51,9 @@ public class Ohh1Controller {
 
         if (searchStrategy == SearchStrategy.ASTAR || searchStrategy == SearchStrategy.GREEDY) {
             engine = new GPSEngine(problem, searchStrategy, new Ohh1Heuristic(heuristic));
+        } else if (searchStrategy == SearchStrategy.IDDFS) {
+            engine = new GPSEngine(problem, searchStrategy, null);
+            engine.setIterativeDepth(iterativeDepth);
         } else {
             engine = new GPSEngine(problem, searchStrategy, null);
         }

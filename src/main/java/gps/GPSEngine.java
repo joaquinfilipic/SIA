@@ -27,6 +27,8 @@ public class GPSEngine {
     // For IDDFS algorithm.
     // TODO: check a better way to handle this.
     private int currentMaxDepth;
+    private int iterativeDepth;
+    private List<GPSNode> pendingNodesWithMaxDepthList;
 
     public GPSEngine(Problem problem, SearchStrategy strategy, Heuristic heuristic) {
 
@@ -46,6 +48,8 @@ public class GPSEngine {
         failed = false;
 
         currentMaxDepth = 0;
+        iterativeDepth = 0;
+        pendingNodesWithMaxDepthList = new LinkedList<>();
     }
 
     public void findSolution() {
@@ -73,7 +77,15 @@ public class GPSEngine {
             } else {
                 if (strategy != SearchStrategy.IDDFS || currentNode.getDepth() < currentMaxDepth) {
                     explode(currentNode);
+                } else if (currentNode.getDepth() >= currentMaxDepth) {
+                    pendingNodesWithMaxDepthList.add(currentNode);
                 }
+            }
+
+            if (open.size() == 0) {
+                open = new LinkedList<>(pendingNodesWithMaxDepthList);
+                pendingNodesWithMaxDepthList.clear();
+                currentMaxDepth += iterativeDepth;
             }
 
             if (strategy == SearchStrategy.IDDFS && open.size() == 0) {
@@ -127,9 +139,10 @@ public class GPSEngine {
                 break;
             case IDDFS:
                 // TODO: check if it is posible to implement this in iddfs algorithm.
-//			if (bestCosts.containsKey(node.getState())) {
-//				return;
-//			}
+                if (bestCosts.containsKey(node.getState())) {
+                    return;
+                }
+
                 newCandidates = new ArrayList<>();
                 addCandidates(node, newCandidates);
 
@@ -205,6 +218,14 @@ public class GPSEngine {
         }
     }
 
+    public int getIterativeDepth() {
+        return iterativeDepth;
+    }
+
+    public void setIterativeDepth(final int iterativeDepth) {
+        this.iterativeDepth = iterativeDepth;
+    }
+
     private static class HeuristicComparator implements Comparator<GPSNode> {
 
         @Override
@@ -268,4 +289,11 @@ public class GPSEngine {
         return strategy;
     }
 
+    public int getCurrentMaxDepth() {
+        return currentMaxDepth;
+    }
+
+    public void setCurrentMaxDepth(final int currentMaxDepth) {
+        this.currentMaxDepth = currentMaxDepth;
+    }
 }
