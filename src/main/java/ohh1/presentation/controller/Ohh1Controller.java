@@ -35,28 +35,12 @@ public class Ohh1Controller {
         Ohh1State initialState = Ohh1InputScanner.scanInitialState(file);
         SearchStrategy searchStrategy = Ohh1InputScanner.scanStrategy(strategy);
 
-        if ((searchStrategy == SearchStrategy.ASTAR || searchStrategy == SearchStrategy.GREEDY)
-                && (heuristic == null || (heuristic != HeuristicEnum.FIRST.getValue() && heuristic != HeuristicEnum.SECOND.getValue()))) {
-            throw new RequestException(HttpStatus.BAD_REQUEST, "A Star and GREEDY required a valid heuristic param, " +
-                    "heuristic ∈ {1, 2}");
-        } else if (searchStrategy == SearchStrategy.IDDFS && (iterativeDepth == null || iterativeDepth <= 0)) {
-            throw new RequestException(HttpStatus.BAD_REQUEST, "IDDFS required a valid iterativeDepth param greater " +
-                    "than zero");
-        }
+        verifyParams(searchStrategy, heuristic, iterativeDepth);
 
         log.info("Input correctly scanned");
 
         Problem problem = new Ohh1Problem(initialState);
-        GPSEngine engine;
-
-        if (searchStrategy == SearchStrategy.ASTAR || searchStrategy == SearchStrategy.GREEDY) {
-            engine = new GPSEngine(problem, searchStrategy, new Ohh1Heuristic(heuristic));
-        } else if (searchStrategy == SearchStrategy.IDDFS) {
-            engine = new GPSEngine(problem, searchStrategy, null);
-            engine.setIterativeDepth(iterativeDepth);
-        } else {
-            engine = new GPSEngine(problem, searchStrategy, null);
-        }
+        GPSEngine engine = generateGPSEngine(problem, searchStrategy, heuristic, iterativeDepth);
 
         engine.findSolution();
 
@@ -71,13 +55,39 @@ public class Ohh1Controller {
         String solution = engine.getSolutionNode().getSolution();
 
         System.out.println(solution);
-
         System.out.println("Explosion counter with " + engine.getStrategy() + ": " + engine.getExplosionCounter());
 
         if (searchStrategy == SearchStrategy.GREEDY || searchStrategy == SearchStrategy.ASTAR)
-            System.out.println(("Heuristic: " + engine.getSolutionNode().getCost()));
+            System.out.println(("Costo del nodo solución: " + engine.getSolutionNode().getCost()));
 
         return engine.getSolutionNode().getState().getRepresentation();
+    }
 
+    private void verifyParams(final SearchStrategy searchStrategy, final Integer heuristic,
+                              final Integer iterativeDepth) {
+        if ((searchStrategy == SearchStrategy.ASTAR || searchStrategy == SearchStrategy.GREEDY)
+                && (heuristic == null || (heuristic != HeuristicEnum.FIRST.getValue() && heuristic != HeuristicEnum.SECOND.getValue()))) {
+            throw new RequestException(HttpStatus.BAD_REQUEST, "A Star and GREEDY required a valid heuristic param, " +
+                    "heuristic ∈ {1, 2}");
+        } else if (searchStrategy == SearchStrategy.IDDFS && (iterativeDepth == null || iterativeDepth <= 0)) {
+            throw new RequestException(HttpStatus.BAD_REQUEST, "IDDFS required a valid iterativeDepth param greater " +
+                    "than zero");
+        }
+    }
+
+    private GPSEngine generateGPSEngine(final Problem problem, final SearchStrategy searchStrategy,
+                                        final Integer heuristic, final Integer iterativeDepth) {
+        GPSEngine engine;
+
+        if (searchStrategy == SearchStrategy.ASTAR || searchStrategy == SearchStrategy.GREEDY) {
+            engine = new GPSEngine(problem, searchStrategy, new Ohh1Heuristic(heuristic));
+        } else if (searchStrategy == SearchStrategy.IDDFS) {
+            engine = new GPSEngine(problem, searchStrategy, null);
+            engine.setIterativeDepth(iterativeDepth);
+        } else {
+            engine = new GPSEngine(problem, searchStrategy, null);
+        }
+
+        return engine;
     }
 }
