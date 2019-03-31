@@ -66,6 +66,9 @@ public class Ohh1Controller {
 
         System.out.println("Explosion counter with " + engine.getStrategy() + ": " + engine.getExplosionCounter());
 
+        if (searchStrategy == SearchStrategy.GREEDY || searchStrategy == SearchStrategy.ASTAR)
+            System.out.println(("Heuristic: " + engine.getSolutionNode().getCost()));
+
         return engine.getSolutionNode().getState().getRepresentation();
 
     }

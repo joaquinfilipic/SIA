@@ -31,8 +31,8 @@ public class GPSEngine {
     public GPSEngine(Problem problem, SearchStrategy strategy, Heuristic heuristic) {
 
         // TODO: open = *Su queue favorito, TENIENDO EN CUENTA EL ORDEN DE LOS NODOS*
-        if (strategy == SearchStrategy.ASTAR) {
-            open = new PriorityQueue(new AStarComparator());
+        if (strategy == SearchStrategy.ASTAR || strategy == SearchStrategy.GREEDY) {
+            open = new PriorityQueue(new HeuristicComparator());
         } else {
             open = new LinkedList<>();
         }
@@ -51,7 +51,7 @@ public class GPSEngine {
     public void findSolution() {
         GPSNode rootNode = new GPSNode(problem.getInitState(), 0, null, 0);
 
-        if (strategy == SearchStrategy.ASTAR) {
+        if (strategy == SearchStrategy.ASTAR || strategy == SearchStrategy.GREEDY) {
             if (!heuristic.isPresent()) {
                 throw new RequestException(HttpStatus.INTERNAL_SERVER_ERROR, "HeuristicEnum not found");
             }
@@ -83,9 +83,9 @@ public class GPSEngine {
                 open.add(rootNode);
 
                 currentMaxDepth++;
-            } else if (strategy == SearchStrategy.ASTAR && open.size() == 0) {
+            } else if ((strategy == SearchStrategy.ASTAR || strategy == SearchStrategy.GREEDY)&& open.size() == 0) {
 
-                open = new PriorityQueue<>(new AStarComparator());
+                open = new PriorityQueue<>(new HeuristicComparator());
                 open.add(rootNode);
 
                 currentMaxDepth++;
@@ -142,8 +142,24 @@ public class GPSEngine {
 
                 break;
             case GREEDY:
-                newCandidates = new PriorityQueue<>(/* TODO: Comparator! */);
+                if (!isBest(node.getState(), node.getCost())) {
+                    return;
+                }
+                bestCosts.clear();
+
+                newCandidates = new PriorityQueue<>(new HeuristicComparator());
                 addCandidates(node, newCandidates);
+
+                PriorityQueue greedyPriorityQueue = (PriorityQueue) open;
+
+                greedyPriorityQueue.clear();
+
+                for (GPSNode candidate : newCandidates){
+                    greedyPriorityQueue.add(candidate);
+                }
+
+                printOpen(greedyPriorityQueue);
+
                 // TODO: ¿Cómo se agregan los nodos a open en GREEDY?
                 break;
             case ASTAR:
@@ -151,11 +167,7 @@ public class GPSEngine {
                     return;
                 }
 
-                if (bestCosts.containsKey(node.getState())) {
-                    return;
-                }
-
-                newCandidates = new PriorityQueue<>(new AStarComparator());
+                newCandidates = new PriorityQueue<>(new HeuristicComparator());
                 addCandidates(node, newCandidates);
 
                 PriorityQueue aStarPriorityQueue = (PriorityQueue) open;
@@ -177,7 +189,7 @@ public class GPSEngine {
             if (newState.isPresent()) {
                 GPSNode newNode;
 
-                if (strategy == SearchStrategy.ASTAR) {
+                if (strategy == SearchStrategy.ASTAR || strategy == SearchStrategy.GREEDY) {
                     newNode = new GPSNode(newState.get(),
                             node.getCost() + rule.getCost() + heuristic.get().getValue(newState.get()), rule,
                             node.getDepth() + 1);
@@ -193,7 +205,7 @@ public class GPSEngine {
         }
     }
 
-    private static class AStarComparator implements Comparator<GPSNode> {
+    private static class HeuristicComparator implements Comparator<GPSNode> {
 
         @Override
         public int compare(final GPSNode node1, final GPSNode node2) {
