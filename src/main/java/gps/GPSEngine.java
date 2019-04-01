@@ -20,6 +20,7 @@ public class GPSEngine {
     boolean failed;
     GPSNode solutionNode;
     Optional<Heuristic> heuristic;
+    private Integer analyzedStates=0;
 
     // Use this variable in open set order.
     protected SearchStrategy strategy;
@@ -69,6 +70,7 @@ public class GPSEngine {
         while (open.size() > 0) {
 
             GPSNode currentNode = open.remove();
+            analyzedStates++;
 
             if (problem.isGoal(currentNode.getState())) {
                 finished = true;
@@ -295,5 +297,9 @@ public class GPSEngine {
 
     public void setCurrentMaxDepth(final int currentMaxDepth) {
         this.currentMaxDepth = currentMaxDepth;
+    }
+
+    public Integer getAnalyzedStates(){
+        return this.analyzedStates;
     }
 }
