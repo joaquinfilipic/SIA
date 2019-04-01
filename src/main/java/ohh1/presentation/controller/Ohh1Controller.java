@@ -37,8 +37,15 @@ public class Ohh1Controller {
         Ohh1State initialState = Ohh1InputScanner.scanInitialState(file);
         SearchStrategy searchStrategy = Ohh1InputScanner.scanStrategy(strategy);
 
-        verifyParams(searchStrategy, heuristic, iterativeDepth);
+        if (heuristic == null) {
+            heuristic = 1;
+        }
 
+        if (iterativeDepth == null) {
+            iterativeDepth = 2;
+        }
+
+        verifyParams(searchStrategy, heuristic, iterativeDepth);
         log.info("Input correctly scanned");
 
         Problem problem = new Ohh1Problem(initialState);
@@ -48,7 +55,7 @@ public class Ohh1Controller {
         long startTime = System.nanoTime();
         engine.findSolution();
         long endTime   = System.nanoTime();
-        long totalTime = (endTime - startTime) / 1000000;
+        long totalTime = endTime - startTime;
 
         if (engine.isFailed()) {
             throw new RequestException(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -65,15 +72,15 @@ public class Ohh1Controller {
         return engine.getSolutionNode().getState().getRepresentation();
     }
 
-    private void verifyParams(final SearchStrategy searchStrategy, final Integer heuristic,
-                              final Integer iterativeDepth) {
+    private void verifyParams(final SearchStrategy searchStrategy, final Integer heuristic, Integer iterativeDepth) {
+
         if ((searchStrategy == SearchStrategy.ASTAR || searchStrategy == SearchStrategy.GREEDY)
-                && (heuristic == null || (heuristic != HeuristicEnum.FIRST.getValue() && heuristic != HeuristicEnum.SECOND.getValue()))) {
+                &&  (heuristic != HeuristicEnum.FIRST.getValue() && heuristic != HeuristicEnum.SECOND.getValue())) {
             throw new RequestException(HttpStatus.BAD_REQUEST, "A Star and GREEDY required a valid heuristic param, " +
                     "heuristic ∈ {1, 2}");
-        } else if (searchStrategy == SearchStrategy.IDDFS && (iterativeDepth == null || iterativeDepth <= 0)) {
-            throw new RequestException(HttpStatus.BAD_REQUEST, "IDDFS required a valid iterativeDepth param greater " +
-                    "than zero");
+        } else if (searchStrategy == SearchStrategy.IDDFS && iterativeDepth <= 0) {
+                throw new RequestException(HttpStatus.BAD_REQUEST, "IDDFS required an optional iterativeDepth param greater " +
+                        "than zero");
         }
     }
 
@@ -110,7 +117,6 @@ public class Ohh1Controller {
         System.out.println("Solution node depth: " + engine.getSolutionNode().getDepth());
         System.out.println("Analize states: " + engine.getAnalyzedStates());
         System.out.println("Find solution: " + engine.isFinished());
-        long durationInMs = TimeUnit.NANOSECONDS.toMillis(totalTime);
-        System.out.println("Execution time: " + totalTime + " ms");
+        System.out.println("Execution time: " + totalTime + " ns");
     }
 }
