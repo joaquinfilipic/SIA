@@ -16,8 +16,6 @@ import ar.edu.itba.sia.gps.GPSEngine;
 import ar.edu.itba.sia.gps.SearchStrategy;
 import ar.edu.itba.sia.gps.api.Problem;
 
-import java.util.concurrent.TimeUnit;
-
 @RestController
 @RequestMapping("/")
 public class Ohh1Controller {
@@ -39,7 +37,7 @@ public class Ohh1Controller {
         SearchStrategy searchStrategy = Ohh1InputScanner.scanStrategy(strategy);
 
         if (heuristic == null) {
-            heuristic = 1;
+            heuristic = HeuristicEnum.FIRST.getValue();
         }
 
         if (iterativeDepth == null) {
