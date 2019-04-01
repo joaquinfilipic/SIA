@@ -3,7 +3,7 @@ package ohh1.model;
 import java.util.Arrays;
 import java.util.List;
 
-import gps.api.State;
+import ar.edu.itba.sia.gps.api.State;
 
 public class Ohh1State implements State {
 

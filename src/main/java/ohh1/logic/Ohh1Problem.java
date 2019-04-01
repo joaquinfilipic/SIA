@@ -2,9 +2,9 @@ package ohh1.logic;
 
 import java.util.List;
 
-import gps.api.Problem;
-import gps.api.Rule;
-import gps.api.State;
+import ar.edu.itba.sia.gps.api.Problem;
+import ar.edu.itba.sia.gps.api.Rule;
+import ar.edu.itba.sia.gps.api.State;
 import ohh1.model.CellColor;
 import ohh1.model.Ohh1State;
 

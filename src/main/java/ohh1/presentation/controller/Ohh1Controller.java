@@ -1,8 +1,5 @@
 package ohh1.presentation.controller;
 
-import gps.GPSEngine;
-import gps.SearchStrategy;
-import gps.api.Problem;
 import ohh1.exception.RequestException;
 import ohh1.logic.Ohh1Heuristic;
 import ohh1.logic.Ohh1InputScanner;
@@ -14,6 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import ar.edu.itba.sia.gps.GPSEngine;
+import ar.edu.itba.sia.gps.SearchStrategy;
+import ar.edu.itba.sia.gps.api.Problem;
 
 import java.util.concurrent.TimeUnit;
 

@@ -1,7 +1,7 @@
 package ohh1.logic;
 
-import gps.api.Heuristic;
-import gps.api.State;
+import ar.edu.itba.sia.gps.api.Heuristic;
+import ar.edu.itba.sia.gps.api.State;
 import ohh1.model.CellColor;
 import ohh1.model.Ohh1State;
 

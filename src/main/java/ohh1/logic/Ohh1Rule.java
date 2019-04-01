@@ -2,8 +2,8 @@ package ohh1.logic;
 
 import java.util.Optional;
 
-import gps.api.Rule;
-import gps.api.State;
+import ar.edu.itba.sia.gps.api.Rule;
+import ar.edu.itba.sia.gps.api.State;
 import ohh1.model.Ohh1State;
 
 public class Ohh1Rule implements Rule {

@@ -1,11 +1,12 @@
-package gps;
+package ar.edu.itba.sia.gps;
 
-import gps.api.Heuristic;
-import gps.api.Problem;
-import gps.api.Rule;
-import gps.api.State;
 import ohh1.exception.RequestException;
 import org.springframework.http.HttpStatus;
+
+import ar.edu.itba.sia.gps.api.Heuristic;
+import ar.edu.itba.sia.gps.api.Problem;
+import ar.edu.itba.sia.gps.api.Rule;
+import ar.edu.itba.sia.gps.api.State;
 
 import java.util.*;
 

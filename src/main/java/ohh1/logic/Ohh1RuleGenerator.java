@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import gps.api.Rule;
+import ar.edu.itba.sia.gps.api.Rule;
 import ohh1.model.CellColor;
 import ohh1.model.Point;
 
