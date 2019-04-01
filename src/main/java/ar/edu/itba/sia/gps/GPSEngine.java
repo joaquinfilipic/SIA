@@ -21,7 +21,7 @@ public class GPSEngine {
     boolean failed;
     GPSNode solutionNode;
     Optional<Heuristic> heuristic;
-    private Integer analyzedStates=0;
+    private Integer analyzedStates = 0;
 
     // Use this variable in open set order.
     protected SearchStrategy strategy;
@@ -30,7 +30,6 @@ public class GPSEngine {
     // TODO: check a better way to handle this.
     private int currentMaxDepth;
     private int iterativeDepth;
-    private List<GPSNode> pendingNodesWithMaxDepthList;
 
     public GPSEngine(Problem problem, SearchStrategy strategy, Heuristic heuristic) {
 
@@ -51,7 +50,6 @@ public class GPSEngine {
 
         currentMaxDepth = 0;
         iterativeDepth = 0;
-        pendingNodesWithMaxDepthList = new LinkedList<>();
     }
 
     public void findSolution() {
@@ -77,28 +75,16 @@ public class GPSEngine {
                 finished = true;
                 solutionNode = currentNode;
                 return;
-            } else {
-                if (strategy != SearchStrategy.IDDFS || currentNode.getDepth() < currentMaxDepth) {
-                    explode(currentNode);
-                } else if (currentNode.getDepth() >= currentMaxDepth) {
-                    pendingNodesWithMaxDepthList.add(currentNode);
-                }
-            }
-
-            if (open.size() == 0) {
-                open = new LinkedList<>(pendingNodesWithMaxDepthList);
-                pendingNodesWithMaxDepthList.clear();
-                currentMaxDepth += iterativeDepth;
+            } else if (strategy != SearchStrategy.IDDFS || currentNode.getDepth() < currentMaxDepth) {
+                explode(currentNode);
             }
 
             if (strategy == SearchStrategy.IDDFS && open.size() == 0) {
-
-                // reset open nodes list
-                open = new LinkedList<>();
+                bestCosts.clear();
                 open.add(rootNode);
+                currentMaxDepth += iterativeDepth;
 
-                currentMaxDepth++;
-            } else if ((strategy == SearchStrategy.ASTAR || strategy == SearchStrategy.GREEDY)&& open.size() == 0) {
+            } else if ((strategy == SearchStrategy.ASTAR || strategy == SearchStrategy.GREEDY) && open.size() == 0) {
 
                 open = new PriorityQueue<>(new HeuristicComparator());
                 open.add(rootNode);
@@ -106,6 +92,7 @@ public class GPSEngine {
                 currentMaxDepth++;
             }
         }
+
         failed = true;
         finished = true;
     }
@@ -170,7 +157,7 @@ public class GPSEngine {
 
                 greedyPriorityQueue.clear();
 
-                for (GPSNode candidate : newCandidates){
+                for (GPSNode candidate : newCandidates) {
                     greedyPriorityQueue.add(candidate);
                 }
 
@@ -227,6 +214,7 @@ public class GPSEngine {
 
     public void setIterativeDepth(final int iterativeDepth) {
         this.iterativeDepth = iterativeDepth;
+        setCurrentMaxDepth(iterativeDepth);
     }
 
     private static class HeuristicComparator implements Comparator<GPSNode> {
@@ -300,7 +288,7 @@ public class GPSEngine {
         this.currentMaxDepth = currentMaxDepth;
     }
 
-    public Integer getAnalyzedStates(){
+    public Integer getAnalyzedStates() {
         return this.analyzedStates;
     }
 }
