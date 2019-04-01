@@ -38,7 +38,7 @@ public class Ohh1Controller {
         SearchStrategy searchStrategy = Ohh1InputScanner.scanStrategy(strategy);
 
         if (heuristic == null) {
-            heuristic = 1;
+            heuristic = HeuristicEnum.FIRST.getValue();
         }
 
         if (iterativeDepth == null) {
