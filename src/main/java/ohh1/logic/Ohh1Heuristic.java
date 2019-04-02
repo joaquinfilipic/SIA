@@ -31,23 +31,18 @@ public class Ohh1Heuristic implements Heuristic {
     public Integer getValue(final State state) {
 
         Ohh1State ohh1State = (Ohh1State) state;
-        int restrictionsCount;
+        int maxColsConsecutiveColors;
+        int equalColorCountPerCol;
+        int equalColsCount;
+        int equalRowsCount;
 
-        restrictionsCount = getMaxColsConsecutiveColorsRestriction(ohh1State.getBoard());
+        maxColsConsecutiveColors = getMaxColsConsecutiveColorsRestriction(ohh1State.getBoard());
+        equalColorCountPerCol = checkEqualColorCountPerColRestriction(ohh1State.getBoard());
+        equalColsCount = getEqualColsCount(ohh1State.getBoard());
+        equalRowsCount = getEqualRowsCount(ohh1State.getBoard());
 
-        if (restrictionsCount == 0) {
-            restrictionsCount = checkEqualColorCountPerColRestriction(ohh1State.getBoard());
-        }
-
-        if (restrictionsCount == 0) {
-            restrictionsCount = getEqualColsCount(ohh1State.getBoard());
-        }
-
-        if (restrictionsCount == 0) {
-            restrictionsCount = getEqualRowsCount(ohh1State.getBoard());
-        }
-
-        return restrictionsCount;
+        return Math.max(maxColsConsecutiveColors, Math.max(equalColorCountPerCol, Math.max(equalColsCount,
+                equalRowsCount)));
     }
 
     private int checkEqualColorCountPerColRestriction(final int[][] board) {
