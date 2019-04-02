@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- TEST Esto es para los test, no tocar -->
-	<groupId>gps</groupId>
+	<groupId>ar.edu.itba.sia</groupId>
 	<artifactId>gps</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>

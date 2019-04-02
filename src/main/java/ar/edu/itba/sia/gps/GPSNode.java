@@ -14,12 +14,15 @@ public class GPSNode {
 	private Rule generationRule;
 	
 	private int depth;
+	
+	private int hValue;
 
-	public GPSNode(State state, Integer cost, Rule generationRule, int depth) {
+	public GPSNode(State state, Integer cost, Rule generationRule, int depth, int hValue) {
 		this.state = state;
 		this.cost = cost;
 		this.generationRule = generationRule;
 		this.depth = depth;
+		this.hValue = hValue;
 	}
 
 	public GPSNode getParent() {
@@ -52,6 +55,14 @@ public class GPSNode {
 	
 	public void setDepth(int depth) {
 		this.depth = depth;
+	}
+
+	public int gethValue() {
+		return hValue;
+	}
+
+	public void sethValue(int hValue) {
+		this.hValue = hValue;
 	}
 
 	//TODO: check this method.
