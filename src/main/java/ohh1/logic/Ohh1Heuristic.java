@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class Ohh1Heuristic implements Heuristic {
 
-    public static int FIRST_HEURISTIC = 1;
-    public static int SECOND_HEURISTIC = 2;
+    private final static int FIRST_HEURISTIC = 1;
+    private final static int SECOND_HEURISTIC = 2;
 
     private int heuristic;
 
@@ -31,6 +31,20 @@ public class Ohh1Heuristic implements Heuristic {
     public Integer getValue(final State state) {
 
         Ohh1State ohh1State = (Ohh1State) state;
+
+        switch (heuristic) {
+            case FIRST_HEURISTIC:
+                return getValueFirstHeuristic(ohh1State);
+
+            case SECOND_HEURISTIC:
+                return getValueSecondHeuristic(ohh1State);
+
+            default:
+                return 0;
+        }
+    }
+
+    private int getValueSecondHeuristic(final Ohh1State ohh1State) {
         int maxColsConsecutiveColors;
         int equalColorCountPerCol;
         int equalColsCount;
@@ -43,6 +57,10 @@ public class Ohh1Heuristic implements Heuristic {
 
         return Math.max(maxColsConsecutiveColors, Math.max(equalColorCountPerCol, Math.max(equalColsCount,
                 equalRowsCount)));
+    }
+
+    private int getValueFirstHeuristic(Ohh1State state) {
+        return getCummulativeEqualRowsCount(state.getBoard()) + getColsRestrictionsCount(state.getBoard());
     }
 
     private int checkEqualColorCountPerColRestriction(final int[][] board) {
@@ -148,10 +166,7 @@ public class Ohh1Heuristic implements Heuristic {
                 }
 
                 if (consecutiveColorsCount >= 3 || consecutiveColorsCount <= -3) {
-                    if (heuristic == FIRST_HEURISTIC) {
-                        consecutiveColorsCount = 0;
-                    }
-
+                    consecutiveColorsCount = 0;
                     auxConsecutiveColorsRestrictionCount++;
                 }
             }
@@ -163,67 +178,86 @@ public class Ohh1Heuristic implements Heuristic {
         return maxConsecutiveColorsRestrictionCount;
     }
 
+    private int getCummulativeEqualRowsCount(int[][] board) {
 
-//	private int getColsRestrictionsCount(int[][] board) {
-//
-//		boolean equals;
-//		int equalColsCount = 0;
-//		int consecutiveColorsCount;
-//		int consecutiveColorsRestrictionCount = 0;
-//		int redCount;
-//		int blueCount;
-//		int equalColorCountSumRestricions = 0;
-//
-//		for (int col = 0; col < board.length; col++) {
-//			for (int auxCol = col + 1; auxCol < board.length + 1; auxCol++) {
-//				equals = true;
-//				consecutiveColorsCount = 0;
-//				redCount = 0;
-//				blueCount = 0;
-//				for (int row = 0; row < board.length; row++) {
-//					if (auxCol == board.length) {
-//						equals = false;
-//					} else {
-//						if (equals && board[row][col] != board[row][auxCol]) {
-//							equals = false;
-//						}
-//					}
-//
-//					if (col + 1 == auxCol) {
-//						if (board[row][col] == CellColor.RED.getValue()) {
-//							if (consecutiveColorsCount < 0) {
-//								consecutiveColorsCount = 0;
-//							}
-//							consecutiveColorsCount++;
-//							redCount++;
-//						} else {
-//							if (consecutiveColorsCount > 0) {
-//								consecutiveColorsCount = 0;
-//							}
-//							consecutiveColorsCount--;
-//							blueCount++;
-//						}
-//
-//						if (consecutiveColorsCount >= 3 || consecutiveColorsCount <= -3) {
-//							if (heuristic == FIRST_HEURISTIC) {
-//								consecutiveColorsCount = 0;
-//							}
-//
-//							consecutiveColorsRestrictionCount++;
-//						}
-//					}
-//				}
-//
-//				if (redCount != blueCount) {
-//					equalColorCountSumRestricions++;
-//				}
-//
-//				if (equals) {
-//					equalColsCount++;
-//				}
-//			}
-//		}
-//
-//		return equalColsCount + consecutiveColorsRestrictionCount + equalColorCountSumRestricions;
-//	}
+        int equalRowsCount = 0;
+        boolean equals;
+
+        for (int row = 0; row < board.length; row++) {
+            for (int auxRow = row + 1; auxRow < board.length; auxRow++) {
+                equals = true;
+                for (int col = 0; col < board.length && equals; col++) {
+                    if (board[row][col] != board[auxRow][col]) {
+                        equals = false;
+                    }
+                }
+
+                if (equals) {
+                    equalRowsCount++;
+                }
+            }
+        }
+
+        return equalRowsCount;
+    }
+
+    private int getColsRestrictionsCount(int[][] board) {
+
+        boolean equals;
+        int equalColsCount = 0;
+        int consecutiveColorsCount;
+        int consecutiveColorsRestrictionCount = 0;
+        int redCount;
+        int blueCount;
+        int equalColorCountSumRestricions = 0;
+
+        for (int col = 0; col < board.length; col++) {
+            for (int auxCol = col + 1; auxCol < board.length + 1; auxCol++) {
+                equals = true;
+                consecutiveColorsCount = 0;
+                redCount = 0;
+                blueCount = 0;
+                for (int row = 0; row < board.length; row++) {
+                    if (auxCol == board.length) {
+                        equals = false;
+                    } else {
+                        if (equals && board[row][col] != board[row][auxCol]) {
+                            equals = false;
+                        }
+                    }
+
+                    if (col + 1 == auxCol) {
+                        if (board[row][col] == CellColor.RED.getValue()) {
+                            if (consecutiveColorsCount < 0) {
+                                consecutiveColorsCount = 0;
+                            }
+                            consecutiveColorsCount++;
+                            redCount++;
+                        } else {
+                            if (consecutiveColorsCount > 0) {
+                                consecutiveColorsCount = 0;
+                            }
+                            consecutiveColorsCount--;
+                            blueCount++;
+                        }
+
+                        if (consecutiveColorsCount >= 3 || consecutiveColorsCount <= -3) {
+                            consecutiveColorsCount = 0;
+                            consecutiveColorsRestrictionCount++;
+                        }
+                    }
+                }
+
+                if (redCount != blueCount) {
+                    equalColorCountSumRestricions++;
+                }
+
+                if (equals) {
+                    equalColsCount++;
+                }
+            }
+        }
+
+        return equalColsCount + consecutiveColorsRestrictionCount + equalColorCountSumRestricions;
+    }
 }
