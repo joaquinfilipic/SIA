@@ -25,14 +25,14 @@ Ejemplo de archivo *board_4x4.txt* de dimensión 4x4:
 1 0 0 1
 ```
 
-3. Elegir una estrategia de búsqueda de entre las siguientes: DFS, BFS, IDDFS, ASTAR and GREEDY.
+3. Elegir una estrategia de búsqueda de entre las siguientes: DFS, BFS, IDDFS, ASTAR y GREEDY (ingresar la opción en minúsculas).
 4. Ejecutar el siguiente curl:
 
-Para las estrategias DFS, BFS y IDDFS (reemplazando *{path_to_the_file}* por la ruta relativa al archivo creado):
+Para las estrategias DFS, BFS y IDDFS (reemplazando *{path_to_file}* por la ruta relativa al archivo creado):
 
 `
-curl -X POST 'http://localhost:8080/resolve?strategy=dfs' -H 'cache-control: no-cache' -F 
-'file=@{path_to_the_file}/board_4x4.txt'
+curl -X POST 'http://localhost:8080/resolve?strategy=dfs' -F 
+'file=@{path_to_file}'
 `
 
 Para las estrategias ASTAR y GREEDY, se puede elegir (opcionalmente) una herística. De no especificarse, se tomará la número 1.
@@ -41,6 +41,6 @@ Opciones de heurísticas: números enteros (1, 2).
 Se debe reemplazar *{heuristic}* por el número de heurística elegido.
 
 `
-curl -X POST 'http://localhost:8080/resolve?strategy=dfs&heuristic={heuristic}' -H 'cache-control: no-cache' -F 
-'file=@{path_to_the_file}/board_4x4.txt'
+curl -X POST 'http://localhost:8080/resolve?strategy=dfs&heuristic={heuristic}' -F 
+'file=@{path_to_file}'
 `
