@@ -1,6 +1,6 @@
-package ohh1.logic;
+package ar.edu.itba.sia.ohh1.logic;
 
-import ohh1.model.CellColor;
+import ar.edu.itba.sia.ohh1.model.CellColor;
 
 public class Ohh1RestrictionManager {
 

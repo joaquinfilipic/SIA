@@ -1,10 +1,10 @@
-package ohh1.logic;
+package ar.edu.itba.sia.ohh1.logic;
 
 import java.util.Optional;
 
 import ar.edu.itba.sia.gps.api.Rule;
 import ar.edu.itba.sia.gps.api.State;
-import ohh1.model.Ohh1State;
+import ar.edu.itba.sia.ohh1.model.Ohh1State;
 
 public class Ohh1Rule implements Rule {
 	

@@ -1,4 +1,4 @@
-package ohh1.logic;
+package ar.edu.itba.sia.ohh1.logic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import ar.edu.itba.sia.gps.api.Rule;
-import ohh1.model.CellColor;
-import ohh1.model.Point;
+import ar.edu.itba.sia.ohh1.model.CellColor;
+import ar.edu.itba.sia.ohh1.model.Point;
 
 public class Ohh1RuleGenerator {
 

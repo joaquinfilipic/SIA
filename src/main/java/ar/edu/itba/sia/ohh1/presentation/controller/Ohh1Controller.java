@@ -1,11 +1,5 @@
-package ohh1.presentation.controller;
+package ar.edu.itba.sia.ohh1.presentation.controller;
 
-import ohh1.exception.RequestException;
-import ohh1.logic.Ohh1Heuristic;
-import ohh1.logic.Ohh1InputScanner;
-import ohh1.logic.Ohh1Problem;
-import ohh1.model.HeuristicEnum;
-import ohh1.model.Ohh1State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 import ar.edu.itba.sia.gps.GPSEngine;
 import ar.edu.itba.sia.gps.SearchStrategy;
 import ar.edu.itba.sia.gps.api.Problem;
+import ar.edu.itba.sia.ohh1.exception.RequestException;
+import ar.edu.itba.sia.ohh1.logic.Ohh1Heuristic;
+import ar.edu.itba.sia.ohh1.logic.Ohh1InputScanner;
+import ar.edu.itba.sia.ohh1.logic.Ohh1Problem;
+import ar.edu.itba.sia.ohh1.model.HeuristicEnum;
+import ar.edu.itba.sia.ohh1.model.Ohh1State;
 
 @RestController
 @RequestMapping("/")

@@ -1,13 +1,13 @@
-package ohh1.logic;
+package ar.edu.itba.sia.ohh1.logic;
 
-import ohh1.exception.RequestException;
-import ohh1.model.CellColor;
-import ohh1.model.Ohh1State;
-import ohh1.model.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import ar.edu.itba.sia.gps.SearchStrategy;
+import ar.edu.itba.sia.ohh1.exception.RequestException;
+import ar.edu.itba.sia.ohh1.model.CellColor;
+import ar.edu.itba.sia.ohh1.model.Ohh1State;
+import ar.edu.itba.sia.ohh1.model.Point;
 
 import java.io.IOException;
 import java.util.*;

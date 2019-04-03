@@ -1,4 +1,4 @@
-package ohh1;
+package ar.edu.itba.sia.ohh1;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

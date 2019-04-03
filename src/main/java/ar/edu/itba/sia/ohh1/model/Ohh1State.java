@@ -1,4 +1,4 @@
-package ohh1.model;
+package ar.edu.itba.sia.ohh1.model;
 
 import java.util.Arrays;
 import java.util.List;

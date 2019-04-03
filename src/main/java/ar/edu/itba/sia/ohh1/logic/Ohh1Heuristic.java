@@ -1,9 +1,9 @@
-package ohh1.logic;
+package ar.edu.itba.sia.ohh1.logic;
 
 import ar.edu.itba.sia.gps.api.Heuristic;
 import ar.edu.itba.sia.gps.api.State;
-import ohh1.model.CellColor;
-import ohh1.model.Ohh1State;
+import ar.edu.itba.sia.ohh1.model.CellColor;
+import ar.edu.itba.sia.ohh1.model.Ohh1State;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package ohh1.configuration;
+package ar.edu.itba.sia.ohh1.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

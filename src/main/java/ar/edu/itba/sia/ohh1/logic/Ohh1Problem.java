@@ -1,12 +1,12 @@
-package ohh1.logic;
+package ar.edu.itba.sia.ohh1.logic;
 
 import java.util.List;
 
 import ar.edu.itba.sia.gps.api.Problem;
 import ar.edu.itba.sia.gps.api.Rule;
 import ar.edu.itba.sia.gps.api.State;
-import ohh1.model.CellColor;
-import ohh1.model.Ohh1State;
+import ar.edu.itba.sia.ohh1.model.CellColor;
+import ar.edu.itba.sia.ohh1.model.Ohh1State;
 
 public class Ohh1Problem implements Problem {
 

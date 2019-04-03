@@ -1,4 +1,4 @@
-package ohh1.exception;
+package ar.edu.itba.sia.ohh1.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

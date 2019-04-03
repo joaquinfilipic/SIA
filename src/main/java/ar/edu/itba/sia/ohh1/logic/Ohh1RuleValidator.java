@@ -1,6 +1,6 @@
-package ohh1.logic;
+package ar.edu.itba.sia.ohh1.logic;
 
-import ohh1.model.Ohh1State;
+import ar.edu.itba.sia.ohh1.model.Ohh1State;
 
 public class Ohh1RuleValidator {
 
