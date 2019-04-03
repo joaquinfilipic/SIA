@@ -101,6 +101,7 @@ public class Ohh1Controller {
 		System.out.println("Explosion counter: " + engine.getExplosionCounter());
 		System.out.println("Solution node depth: " + engine.getSolutionNode().getDepth());
 		System.out.println("Analize states: " + engine.getAnalyzedStates());
+		System.out.println("Frontier nodes: " + engine.getFrontierNodes());
 		System.out.println("Find solution: " + engine.isFinished());
 		System.out.println("Execution time: " + totalTime + " ns");
 	}

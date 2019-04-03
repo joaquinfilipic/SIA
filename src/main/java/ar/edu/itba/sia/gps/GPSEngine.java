@@ -287,4 +287,8 @@ public class GPSEngine {
 	public Integer getAnalyzedStates() {
 		return this.analyzedStates;
 	}
+
+	public int getFrontierNodes() {
+		return open.size();
+	}
 }
