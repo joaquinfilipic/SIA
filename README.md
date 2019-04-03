@@ -41,6 +41,6 @@ Opciones de heurísticas: números enteros (1, 2).
 Se debe reemplazar *{heuristic}* por el número de heurística elegido.
 
 `
-curl -X POST 'http://localhost:8080/resolve?strategy=dfs&heuristic={heuristic}' -F 
+curl -X POST 'http://localhost:8080/resolve?strategy=astar&heuristic={heuristic}' -F 
 'file=@{path_to_file}'
 `
