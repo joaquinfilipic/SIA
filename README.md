@@ -44,9 +44,3 @@ Se debe reemplazar *{heuristic}* por el número de heurística elegido.
 curl -X POST 'http://localhost:8080/resolve?strategy=dfs&heuristic={heuristic}' -H 'cache-control: no-cache' -F 
 'file=@{path_to_the_file}/board_4x4.txt'
 `
-
-
-`
-curl -X POST 'http://localhost:8080/resolve?strategy=dfs' -H 'cache-control: no-cache' -F 
-'file=@{full_path_to_the_file}/board_4x4.txt'
-`
