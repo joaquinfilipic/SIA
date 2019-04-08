@@ -6,7 +6,9 @@ import ar.edu.itba.sia.ohh1.model.CellColor;
 import ar.edu.itba.sia.ohh1.model.Ohh1State;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Ohh1Heuristic implements Heuristic {
 
@@ -45,17 +47,12 @@ public class Ohh1Heuristic implements Heuristic {
     }
 
     private int getValueSecondHeuristic(final Ohh1State ohh1State) {
-        int maxColsConsecutiveColors;
-        int equalColorCountPerCol;
-        int equalColsCount;
-        int equalRowsCount;
+        int maxColsConsecutiveColors = getMaxColsConsecutiveColorsRestriction(ohh1State.getBoard());
+        int maxEqualColorCountPerCol = getMaxEqualColorCountPerColRestriction(ohh1State.getBoard());
+        int equalRowsCount = getEqualRowsCount(ohh1State.getBoard());
+        int equalCols = checkEqualCols(ohh1State.getBoard());
 
-        maxColsConsecutiveColors = getMaxColsConsecutiveColorsRestriction(ohh1State.getBoard());
-        equalColorCountPerCol = checkEqualColorCountPerColRestriction(ohh1State.getBoard());
-        equalColsCount = getEqualColsCount(ohh1State.getBoard());
-        equalRowsCount = getEqualRowsCount(ohh1State.getBoard());
-
-        return Math.max(maxColsConsecutiveColors, Math.max(equalColorCountPerCol, Math.max(equalColsCount,
+        return Math.max(maxColsConsecutiveColors, Math.max(maxEqualColorCountPerCol, Math.max(equalCols,
                 equalRowsCount)));
     }
 
@@ -63,10 +60,11 @@ public class Ohh1Heuristic implements Heuristic {
         return getCummulativeEqualRowsCount(state.getBoard()) + getColsRestrictionsCount(state.getBoard());
     }
 
-    private int checkEqualColorCountPerColRestriction(final int[][] board) {
+    private int getMaxEqualColorCountPerColRestriction(final int[][] board) {
 
         int redCount;
         int blueCount;
+        int maxEqualColorCount = 0;
 
         for (int col = 0; col < board.length; col++) {
             redCount = 0;
@@ -80,18 +78,15 @@ public class Ohh1Heuristic implements Heuristic {
                 }
             }
 
-            if (redCount != blueCount) {
-                return 1;
-            }
+            maxEqualColorCount = Math.max(maxEqualColorCount, Math.abs(redCount - blueCount) / 2);
         }
 
-        return 0;
+        return maxEqualColorCount;
     }
 
-    private int getEqualColsCount(final int[][] board) {
+    private int checkEqualCols(final int[][] board) {
 
-        Map<Integer, Integer> colsMap = new HashMap<>();
-        int equalColsCount = 0;
+        Set<Integer> colsSet = new HashSet<>();
         StringBuilder colString;
 
         for (int col = 0; col < board.length; col++) {
@@ -101,18 +96,14 @@ public class Ohh1Heuristic implements Heuristic {
                 colString.append(board[row][col]);
             }
 
-            if (colsMap.containsKey(colString.toString().hashCode())) {
-                colsMap.put(colString.toString().hashCode(), colsMap.get(colString.toString().hashCode()) + 1);
+            if (colsSet.contains(colString.toString().hashCode())) {
+                return 1;
             } else {
-                colsMap.put(colString.toString().hashCode(), 1);
+                colsSet.add(colString.toString().hashCode());
             }
         }
 
-        for (Map.Entry<Integer, Integer> entry : colsMap.entrySet()) {
-            equalColsCount += entry.getValue() - 1;
-        }
-
-        return equalColsCount;
+        return 0;
     }
 
     private int getEqualRowsCount(final int[][] board) {
